@@ -1,6 +1,29 @@
 require 'socket'
 
 class ChatServer
+  def start_menu
+    puts "       =[                     TCPChat v1.0.0                    ]"
+    puts "+ -- --=[           A simple TCP chat server in Ruby            ]"
+    puts "+ -- --=[ Type 'q' or 'quit' in the server console to shut down ]"
+    puts "+ -- --=[         Clients can type 'quit' to disconnect.        ]"
+    puts "TCPChat tip: Use 'help' to see available commands"
+    h_input = gets.chomp
+    case h_input 
+    when "start"
+        run
+    when "help"
+        puts "Available commands:"
+        puts "start - Starts a server on port 3001 for two-way communication"
+        puts "help - Show this help message"
+        puts "q/quit - Exit TCPChat"
+        start_menu
+    when "q", "quit"
+        puts "Exiting..."
+        exit
+    else 
+        start_menu
+    end
+  end
   def initialize(port)
     @server = TCPServer.new(port)
     @clients = []
@@ -27,7 +50,7 @@ class ChatServer
     
     loop do
       msg = client.gets.chomp
-      break if msg.downcase == 'q'
+      break if msg.downcase == 'quit' || msg.downcase == 'q'
       
       # Broadcast message from this client
       broadcast("#{client.peeraddr[3]}: #{msg}", client)
@@ -47,7 +70,7 @@ class ChatServer
   def listen_for_server_input
     loop do
       input = gets.chomp  # Get input from the server console
-      break if input.downcase == 'exit'  # Allow server shutdown with 'exit'
+      break if input.downcase == 'quit' || input.downcase == 'q'   # Allow server shutdown 
       
       # Broadcast the server message to all clients
       broadcast("Server: #{input}", nil)
@@ -55,4 +78,5 @@ class ChatServer
   end
 end
 
-ChatServer.new(3001).run
+server = ChatServer.new(3001)
+server.start_menu
