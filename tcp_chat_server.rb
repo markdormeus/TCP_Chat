@@ -25,7 +25,7 @@ class ChatServer
     end
   end
   def initialize(port)
-    @server = TCPServer.new(port)
+    @server = TCPServer.new('0.0.0.0', port)
     @clients = []
     puts "Chat server started on port #{port}"
     puts Time.now
@@ -46,19 +46,24 @@ class ChatServer
   private
 
   def handle_client(client)
+    client_address = client.peeraddr[3]
     client.puts "Welcome to the chat! Type 'quit' to exit."
     
     loop do
-      msg = client.gets.chomp
-      break if msg.downcase == 'quit' || msg.downcase == 'q'
+      msg = client.gets
+      break if msg.nil? || msg.downcase.strip == 'quit' || msg.downcase.strip == 'q'
       
       # Broadcast message from this client
-      broadcast("#{client.peeraddr[3]}: #{msg}", client)
+      broadcast("#{msg}", client)
     end
+  rescue IOError => e
+    puts "Error handling client: #{e.message}"
+  ensure
     @clients.delete(client)
-    client.close
-    puts "Client disconnected: #{client.peeraddr[3]}"
+    client.close rescue nil  # Ignore errors on close
+    puts "Client disconnected: #{client_address}"
   end
+
 
   def broadcast(msg, sender)
     puts msg  # Server-side logging
