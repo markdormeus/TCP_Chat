@@ -20,7 +20,7 @@ TCPChat is a simple TCP chat server implemented in Ruby. It allows multiple clie
 
 1. **Clone the repository** (if applicable):
    ```bash
-   git clone https://github.com/markdormeus/TCP_Chat
+   git clone https://github.com/markdormeus/TCPChat
    cd TCPChat
 2. Install Ruby: Make sure you have Ruby installed on your machine. You can check if Ruby is installed by running:
    ```bash
@@ -29,13 +29,17 @@ TCPChat is a simple TCP chat server implemented in Ruby. It allows multiple clie
 ## Usage
 
 1. Run the server:
-   Open a terminal and navigate to the directory where tcp_chat.rb is located. Start the server by running:
+   Open a terminal and navigate to the directory where tcp_chat_server.rb is located. Start the server by running:
    ```bash
-   ruby tcp_chat.rb
+   ruby tcp_chat_server.rb
 2. Start the chat:
    In the server console, type start to begin listening for client connections.
 3. Connect clients:
-   Open additional terminal windows (or tabs) and connect clients using telnet or nc (netcat):
+   For the client(s), open a terminal and navigate to the directory where tcp_chat_client.rb is located. Join the preexisting server by running:
+   ```bash
+   ruby tcp_chat_client.rb
+   ```
+   Alternatively, you can join from the same machine by running:
    ```bash
    telnet localhost 3001
    ```
@@ -59,7 +63,7 @@ TCPChat is a simple TCP chat server implemented in Ruby. It allows multiple clie
    New client connected: 8.8.8.8
 3. Clients send messages:
    ```bash
-   Client 8.8.8.8: Hello everyone!
+   <username>: Hello everyone!
 4. Server broadcasts messages:
    ```bash
    Server: Hello everyone!
